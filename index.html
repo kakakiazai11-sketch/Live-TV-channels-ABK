@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Live TV Box</title>
+    <title>Mera Live TV Box</title>
     <!-- HLS.js for playing .m3u8 streams -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body { background-color: #121212; color: #ffffff; font-family: sans-serif; margin: 0; padding: 20px; }
         h1 { text-align: center; color: #00bcd4; }
         .container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: auto; }
-        .sidebar { flex: 1; min-width: 250px; background: #1e1e1e; padding: 15px; border-radius: 8px; max-height: 500px; overflow-y: auto; }
+        .sidebar { flex: 1; min-width: 280px; background: #1e1e1e; padding: 15px; border-radius: 8px; max-height: 550px; overflow-y: auto; }
         .player-area { flex: 3; min-width: 300px; background: #1e1e1e; padding: 15px; border-radius: 8px; text-align: center; }
         video { width: 100%; max-height: 450px; background: #000; border-radius: 6px; }
         ul { list-style: none; padding: 0; }
-        li { padding: 10px; margin-bottom: 8px; background: #2c2c2c; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        li { padding: 12px; margin-bottom: 8px; background: #2c2c2c; cursor: pointer; border-radius: 4px; transition: 0.2s; font-size: 15px; }
         li:hover { background: #00bcd4; color: #000; }
+        .category { color: #ff9800; font-weight: bold; margin-top: 10px; margin-bottom: 5px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -25,18 +26,29 @@
     <div class="container">
         <!-- چینلز کی لسٹ -->
         <div class="sidebar">
-            <h3>Channels List</h3>
-            <ul id="channel-list">
-                <!-- یہاں آپ اپنے پسندیدہ چینلز کے HLS (.m3u8) لنکس ڈالیں گے -->
-                <li onclick="playChannel('YOUR_CHANNEL_LINK_1.m3u8', 'Channel 1')">Channel 1 (Sports/News)</li>
-                <li onclick="playChannel('YOUR_CHANNEL_LINK_2.m3u8', 'Channel 2')">Channel 2 (Cartoon/Kids)</li>
-                <li onclick="playChannel('YOUR_CHANNEL_LINK_3.m3u8', 'Channel 3')">Channel 3 (Islamic)</li>
+            <h3>Live Channels List</h3>
+            <ul>
+                <div class="category">-- اسپورٹس اور کرکٹ --</div>
+                <li onclick="playChannel('https://etv-sports.elitesports.global/playlist.m3u8', 'PTV Sports / Sports HD')">PTV / Sports HD</li>
+                <li onclick="playChannel('https://unlimited1.dps.live/tenports/tracks-v1a1/mono.m3u8', 'Ten Sports')">Ten Sports</li>
+
+                <div class="category">-- پاکستانی نیوز اور انٹرٹینمنٹ --</div>
+                <li onclick="playChannel('https://live.geo.tv/georetails/ngrp:geo_all_all/playlist.m3u8', 'Geo News')">Geo News</li>
+                <li onclick="playChannel('https://live.arynews.tv/hls/live.m3u8', 'ARY News')">ARY News</li>
+                <li onclick="playChannel('https://cdn.oxive.pk/bolnews/livestream/playlist.m3u8', 'Bol News')">Bol News</li>
+
+                <div class="category">-- کارٹون اور کڈز --</div>
+                <li onclick="playChannel('https://play.streann.com/play/playlist.m3u8?account=5c9c9b13b194d30001f37e46&media=5d18b6e6f965d100018dfbe9', 'Kids TV / Cartoons')">Kids Cartoons Channel</li>
+
+                <div class="category">-- اسلامی چینلز --</div>
+                <li onclick="playChannel('https://makkah.live-s.atp-media.com/hls/live/2030997/makkah/master.m3u8', 'Makkah Live (القرآن الكريم)')">Makkah Live</li>
+                <li onclick="playChannel('https://madinah.live-s.atp-media.com/hls/live/2030998/madinah/master.m3u8', 'Madinah Live (السنة النبوية)')">Madinah Live</li>
             </ul>
         </div>
 
         <!-- ویڈیو اسکرین -->
         <div class="player-area">
-            <h3 id="current-title">Select a Channel</h3>
+            <h3 id="current-title">کوئی چینل سلیکٹ کریں</h3>
             <video id="video" controls autoplay></video>
         </div>
     </div>
