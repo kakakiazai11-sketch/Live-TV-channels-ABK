@@ -1,61 +1,93 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mera Live TV Box</title>
-    <!-- HLS.js for playing .m3u8 streams -->
+    <!-- HLS.js for streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { background-color: #121212; color: #ffffff; font-family: sans-serif; margin: 0; padding: 20px; }
-        h1 { text-align: center; color: #00bcd4; }
-        .container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: auto; }
-        .sidebar { flex: 1; min-width: 280px; background: #1e1e1e; padding: 15px; border-radius: 8px; max-height: 550px; overflow-y: auto; }
-        .player-area { flex: 3; min-width: 300px; background: #1e1e1e; padding: 15px; border-radius: 8px; text-align: center; }
-        video { width: 100%; max-height: 450px; background: #000; border-radius: 6px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 12px; margin-bottom: 8px; background: #2c2c2c; cursor: pointer; border-radius: 4px; transition: 0.2s; font-size: 15px; }
-        li:hover { background: #00bcd4; color: #000; }
-        .category { color: #ff9800; font-weight: bold; margin-top: 10px; margin-bottom: 5px; font-size: 14px; }
+        body { background-color: #0d1117; color: #ffffff; font-family: sans-serif; margin: 0; padding: 15px; }
+        h1 { text-align: center; color: #58a6ff; margin-bottom: 10px; }
+        .search-box { text-align: center; margin-bottom: 20px; }
+        .search-box input { width: 60%; padding: 12px; font-size: 16px; border-radius: 6px; border: 1px solid #30363d; background: #161b22; color: #fff; }
+        .main-container { display: flex; flex-wrap: wrap; gap: 20px; max-width: 1400px; margin: auto; }
+        .sidebar { flex: 1; min-width: 320px; background: #161b22; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; border: 1px solid #30363d; }
+        .player-area { flex: 2.5; min-width: 350px; background: #161b22; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #30363d; }
+        video { width: 100%; max-height: 480px; background: #000; border-radius: 6px; }
+        .category-title { color: #f0883e; font-weight: bold; margin: 15px 0 8px 0; font-size: 16px; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
+        .channel-item { display: flex; align-items: center; padding: 10px; margin-bottom: 6px; background: #21262d; cursor: pointer; border-radius: 6px; transition: 0.2s; }
+        .channel-item:hover { background: #30363d; }
+        .channel-item img { width: 35px; height: 35px; object-fit: contain; margin-left: 12px; background: #fff; border-radius: 4px; padding: 2px; }
+        .channel-name { font-size: 15px; font-weight: 500; }
+        #current-title { color: #58a6ff; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <h1>Mera Live TV Box</h1>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="چینل کا نام تلاش کریں..." onkeyup="searchChannel()">
+    </div>
     
-    <div class="container">
-        <!-- چینلز کی لسٹ -->
-        <div class="sidebar">
-            <h3>Live Channels List</h3>
-            <ul>
-                <div class="category">-- اسپورٹس اور کرکٹ --</div>
-                <li onclick="playChannel('https://etv-sports.elitesports.global/playlist.m3u8', 'PTV Sports / Sports HD')">PTV / Sports HD</li>
-                <li onclick="playChannel('https://unlimited1.dps.live/tenports/tracks-v1a1/mono.m3u8', 'Ten Sports')">Ten Sports</li>
+    <div class="main-container">
+        <!-- چینلز کی لسٹ (آئکنز کے ساتھ) -->
+        <div class="sidebar" id="channel-list">
+            <div class="category-title">⭐ پاکستانی اور انڈین اسپورٹس / کرکٹ</div>
+            <div class="channel-item" onclick="playChannel('https://etv-sports.elitesports.global/playlist.m3u8', 'PTV Sports HD')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">PTV Sports HD</span>
+            </div>
+            <div class="channel-item" onclick="playChannel('https://unlimited1.dps.live/tenports/tracks-v1a1/mono.m3u8', 'Ten Sports')">
+                <img src="https://i.imgur.com/7vjZq85.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Ten Sports</span>
+            </div>
 
-                <div class="category">-- پاکستانی نیوز اور انٹرٹینمنٹ --</div>
-                <li onclick="playChannel('https://live.geo.tv/georetails/ngrp:geo_all_all/playlist.m3u8', 'Geo News')">Geo News</li>
-                <li onclick="playChannel('https://live.arynews.tv/hls/live.m3u8', 'ARY News')">ARY News</li>
-                <li onclick="playChannel('https://cdn.oxive.pk/bolnews/livestream/playlist.m3u8', 'Bol News')">Bol News</li>
+            <div class="category-title">📺 خبریں اور انٹرٹینمنٹ</div>
+            <div class="channel-item" onclick="playChannel('https://live.geo.tv/georetails/ngrp:geo_all_all/playlist.m3u8', 'Geo News')">
+                <img src="https://i.imgur.com/495T2b3.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Geo News</span>
+            </div>
+            <div class="channel-item" onclick="playChannel('https://live.arynews.tv/hls/live.m3u8', 'ARY News')">
+                <img src="https://i.imgur.com/3xN9K7q.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">ARY News</span>
+            </div>
+            <div class="channel-item" onclick="playChannel('https://cdn.oxive.pk/bolnews/livestream/playlist.m3u8', 'Bol News')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Bol News</span>
+            </div>
+            <div class="channel-item" onclick="playChannel('https://live.samaa.tv/hls/live.m3u8', 'Samaa TV')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Samaa TV</span>
+            </div>
 
-                <div class="category">-- کارٹون اور کڈز --</div>
-                <li onclick="playChannel('https://play.streann.com/play/playlist.m3u8?account=5c9c9b13b194d30001f37e46&media=5d18b6e6f965d100018dfbe9', 'Kids TV / Cartoons')">Kids Cartoons Channel</li>
+            <div class="category-title">👶 کارٹون اور کڈز چینلز</div>
+            <div class="channel-item" onclick="playChannel('https://play.streann.com/play/playlist.m3u8?account=5c9c9b13b194d30001f37e46&media=5d18b6e6f965d100018dfbe9', 'Kids Cartoons')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Kids Cartoons Channel</span>
+            </div>
 
-                <div class="category">-- اسلامی چینلز --</div>
-                <li onclick="playChannel('https://makkah.live-s.atp-media.com/hls/live/2030997/makkah/master.m3u8', 'Makkah Live (القرآن الكريم)')">Makkah Live</li>
-                <li onclick="playChannel('https://madinah.live-s.atp-media.com/hls/live/2030998/madinah/master.m3u8', 'Madinah Live (السنة النبوية)')">Madinah Live</li>
-            </ul>
+            <div class="category-title">🕋 اسلامی چینلز</div>
+            <div class="channel-item" onclick="playChannel('https://makkah.live-s.atp-media.com/hls/live/2030997/makkah/master.m3u8', 'Makkah Live')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+                <span class="channel-name">Makkah Live (القرآن الكريم)</span>
+            </div>
+            <div class="channel-item" onclick="playChannel('https://madinah.live-s.atp-mind.com/hls/live/2030998/madinah/master.m3u8', 'Madinah Live')">
+                <img src="https://i.imgur.com/8359b3D.png" onerror="this.src='https://via.placeholder.com/35'">
+-                <span class="channel-name">Madinah Live (السنة النبوية)</span>
+            </div>
         </div>
 
         <!-- ویڈیو اسکرین -->
         <div class="player-area">
-            <h3 id="current-title">کوئی چینل سلیکٹ کریں</h3>
+            <h3 id="current-title">کوئی بھی چینل منتخب کریں</h3>
             <video id="video" controls autoplay></video>
         </div>
     </div>
 
     <script>
         function playChannel(url, name) {
-            document.getElementById('current-title').innerText = "Playing: " + name;
+            document.getElementById('current-title').innerText = "پلے ہو رہا ہے: " + name;
             var video = document.getElementById('video');
             if (Hls.isSupported()) {
                 var hls = new Hls();
@@ -69,6 +101,19 @@
                 video.addEventListener('loadedmetadata', function() {
                     video.play();
                 });
+            }
+        }
+
+        function searchChannel() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let items = document.getElementsByClassName('channel-item');
+            for (let i = 0; i < items.length; i++) {
+                let name = items[i].getElementsByClassName('channel-name')[0].innerText.toLowerCase();
+                if (name.includes(input)) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
             }
         }
     </script>
